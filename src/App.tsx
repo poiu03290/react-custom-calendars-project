@@ -3,15 +3,15 @@ import { MonthCalendar, WeekCalendar } from "./lib";
 
 function App() {
   const { weekDates, monthlyWeekGrid, currentDate } = WeekCalendar({
-    type: "dd",
+    type: "MM/dd",
   });
-  const { monthCalendarData } = MonthCalendar({ type: "dd" });
+  const { monthCalendarData } = MonthCalendar({ type: "MM/dd" });
 
   return (
     <>
       <div>
         <p>currentDate: {currentDate}</p>
-        <p>updateDate: 2025-04-01 14:46</p>
+        <p>updateDate: 2025-04-02 00:12</p>
         <div>
           <p>weekDates</p>
           <ul>
@@ -33,7 +33,7 @@ function App() {
                 }}
               >
                 {weeks.map((date, dateIndex) => (
-                  <p key={dateIndex} style={{ width: "20px" }}>
+                  <p key={dateIndex} style={{ width: "60px" }}>
                     {date}
                   </p>
                 ))}
@@ -54,7 +54,7 @@ function App() {
                 }}
               >
                 {weeks.map((date, dateIndex) => (
-                  <p key={dateIndex} style={{ width: "20px" }}>
+                  <p key={dateIndex} style={{ width: "60px" }}>
                     {date}
                   </p>
                 ))}

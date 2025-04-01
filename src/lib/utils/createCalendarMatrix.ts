@@ -40,6 +40,8 @@ export const createCalendarMatrix = (
 
   // 날짜 채우기
   let date = 1;
+  let nextMonthDate = 1;
+
   for (let week = 0; week < 6; week++) {
     for (let day = 0; day < 7; day++) {
       if (week === 0 && day < firstDay) {
@@ -54,21 +56,21 @@ export const createCalendarMatrix = (
             timeZone: "UTC",
           });
         }
-      } else if (date > lastDate) {
+      } else if (date <= lastDate) {
+        // 현재 달의 날짜
+        matrix[week][day] = date++;
+      } else {
         // 다음 달의 날짜
-        const nextDate = date - lastDate;
-        matrix[week][day] = includeAdjacentMonths ? -nextDate : 0;
+        matrix[week][day] = includeAdjacentMonths ? -nextMonthDate : 0;
         if (includeAdjacentMonths) {
           const fullDate = new Date(
-            Date.UTC(nextYear, adjustedNextMonth, nextDate)
+            Date.UTC(nextYear, adjustedNextMonth, nextMonthDate)
           );
-          nextMonthDates[nextDate] = format(fullDate, "yyyy-MM-dd", {
+          nextMonthDates[nextMonthDate] = format(fullDate, "yyyy-MM-dd", {
             timeZone: "UTC",
           });
         }
-        date++;
-      } else {
-        matrix[week][day] = date++;
+        nextMonthDate++;
       }
     }
   }
@@ -86,7 +88,13 @@ export const getWeekFromMatrix = (
   type: string
 ): string[] => {
   // targetDate가 있는 주 찾기
-  const targetWeek = matrix.find((week) => week.includes(targetDate));
+  let targetWeek = matrix.find((week) => week.includes(targetDate));
+
+  // 현재 날짜가 없으면 마지막 주를 반환
+  if (!targetWeek && targetDate > 28) {
+    targetWeek = matrix[matrix.length - 1];
+  }
+
   if (!targetWeek) return [];
 
   return targetWeek.map((day) => {
