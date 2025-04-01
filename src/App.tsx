@@ -11,6 +11,7 @@ function App() {
     <>
       <div>
         <p>currentDate: {currentDate}</p>
+        <p>updateDate: 2025-04-01 12:19</p>
         <div>
           <p>weekDates</p>
           <ul>
