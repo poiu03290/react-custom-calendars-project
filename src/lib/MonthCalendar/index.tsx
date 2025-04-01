@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
-import { CALENDAR_LENGTH, DEFAULT_TRASH_VALUE } from "../utils/constants";
-import createCalendar from "../utils/createCalendar";
+import {
+  createCalendarMatrix,
+  formatMatrixDates,
+} from "../utils/createCalendarMatrix";
 import { toISODateString } from "../utils/date";
 
 interface MonthCalendarOptions {
@@ -16,7 +18,6 @@ const MonthCalendar = ({ type, initialDate }: MonthCalendarOptions) => {
 
   const [currentDate, setCurrentDate] = useState(() => {
     if (initialDate) {
-      // Convert initialDate to UTC and set to first day of month
       return toISODateString(
         new Date(
           Date.UTC(initialDate.getUTCFullYear(), initialDate.getUTCMonth(), 1)
@@ -24,33 +25,21 @@ const MonthCalendar = ({ type, initialDate }: MonthCalendarOptions) => {
       );
     }
 
-    // Get current UTC date without creating a local Date first
     const now = new Date();
-    const utcMs = now.getTime() - now.getTimezoneOffset() * 60000;
-    const utcNow = new Date(utcMs);
     return toISODateString(
-      new Date(Date.UTC(utcNow.getUTCFullYear(), utcNow.getUTCMonth(), 1))
+      new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1))
     );
   });
 
   const [year, month] = currentDate.split("-").map(Number);
 
-  const monthCalendarData = createCalendar({
-    type,
-    year,
-    month: month - 1,
-    calendarLength: CALENDAR_LENGTH,
-    createPrevDays: (prevDaysCount) => {
-      return Array.from({ length: prevDaysCount }).map(
-        () => DEFAULT_TRASH_VALUE
-      );
-    },
-    createNextDays: (nextDaysCount) => {
-      return Array.from({ length: nextDaysCount }).map(
-        () => DEFAULT_TRASH_VALUE
-      );
-    },
-  });
+  const calendarMatrix = useMemo(() => {
+    return createCalendarMatrix(year, month - 1);
+  }, [year, month]);
+
+  const monthCalendarData = useMemo(() => {
+    return formatMatrixDates(calendarMatrix.matrix, year, month - 1, type);
+  }, [calendarMatrix, type]);
 
   const moveMonth = (delta: number) => {
     const date = new Date(Date.UTC(year, month - 1 + delta, 1));
