@@ -1,5 +1,5 @@
 import "./App.css";
-import { MonthCalendar, WeekCalendar } from "react-custom-calendars";
+import { MonthCalendar, WeekCalendar } from "./lib";
 
 function App() {
   const { weekDates, monthlyWeekGrid, currentDate } = WeekCalendar({
