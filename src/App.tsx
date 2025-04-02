@@ -2,7 +2,7 @@ import "./App.css";
 import { MonthCalendar, WeekCalendar } from "./lib";
 
 function App() {
-  const { weekDates, monthlyWeekGrid, currentDate } = WeekCalendar({
+  const { weekDates, monthlyWeekGrid, currentDate, matrix } = WeekCalendar({
     type: "MM/dd",
   });
   const { monthCalendarData } = MonthCalendar({
@@ -16,7 +16,7 @@ function App() {
         <p>updateDate: 2025-04-02 21:49</p>
         <div>
           <p>matrix</p>
-          {/* <ul>
+          <ul>
             {matrix.map((weeks, weekIndex) => (
               <li
                 key={weekIndex}
@@ -33,7 +33,7 @@ function App() {
                 ))}
               </li>
             ))}
-          </ul> */}
+          </ul>
         </div>
 
         <div>
