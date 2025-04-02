@@ -15,8 +15,8 @@ export const createCalendarMatrix = (
 ): CalendarMatrix => {
   // month는 0-based (0: 1월, 11: 12월)
   const firstDayDate = new Date(Date.UTC(year, month, 1));
-  const firstDay = firstDayDate.getDay();
-  const lastDate = new Date(Date.UTC(year, month + 1, 0)).getDate();
+  const firstDay = firstDayDate.getUTCDay();
+  const lastDate = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
 
   // 이전 달의 마지막 날짜 계산
   const prevMonth = month - 1;
@@ -24,7 +24,7 @@ export const createCalendarMatrix = (
   const adjustedPrevMonth = prevMonth < 0 ? 11 : prevMonth;
   const lastDayOfPrevMonth = new Date(
     Date.UTC(prevYear, adjustedPrevMonth + 1, 0)
-  ).getDate();
+  ).getUTCDate();
 
   // 다음 달 계산
   const nextMonth = month + 1;
@@ -95,7 +95,7 @@ export const getWeekFromMatrix = (
   return targetWeek.map((day) => {
     if (day > 0) {
       // 현재 달의 날짜
-      return format(new Date(year, month, day), type);
+      return format(new Date(Date.UTC(year, month, day)), type);
     } else if (day < 0) {
       // 이전/다음 달의 날짜
       const absDay = Math.abs(day);
@@ -120,7 +120,7 @@ export const formatMatrixDates = (
     week.map((day) => {
       if (day > 0) {
         // 현재 달의 날짜
-        return format(new Date(year, month, day), type);
+        return format(new Date(Date.UTC(year, month, day)), type);
       } else if (includeAdjacentMonths && day < 0) {
         // 이전/다음 달의 날짜
         const absDay = Math.abs(day);
