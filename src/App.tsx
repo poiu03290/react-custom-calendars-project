@@ -2,16 +2,40 @@ import "./App.css";
 import { MonthCalendar, WeekCalendar } from "./lib";
 
 function App() {
-  const { weekDates, monthlyWeekGrid, currentDate } = WeekCalendar({
+  const { weekDates, monthlyWeekGrid, currentDate, matrix } = WeekCalendar({
     type: "MM/dd",
   });
-  const { monthCalendarData } = MonthCalendar({ type: "MM/dd" });
+  const { monthCalendarData } = MonthCalendar({
+    type: "MM/dd",
+  });
 
   return (
     <>
       <div>
         <p>currentDate: {currentDate}</p>
-        <p>updateDate: 2025-04-02 16:43</p>
+        <p>updateDate: 2025-04-02 21:49</p>
+        <div>
+          <p>matrix</p>
+          <ul>
+            {matrix.map((weeks, weekIndex) => (
+              <li
+                key={weekIndex}
+                style={{
+                  listStyle: "none",
+                  display: "flex",
+                  gap: "10px",
+                }}
+              >
+                {weeks.map((date, dateIndex) => (
+                  <p key={dateIndex} style={{ width: "60px" }}>
+                    {date}
+                  </p>
+                ))}
+              </li>
+            ))}
+          </ul>
+        </div>
+
         <div>
           <p>weekDates</p>
           <ul>

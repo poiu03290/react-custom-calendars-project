@@ -31,7 +31,7 @@ const MonthCalendar = ({ type, initialDate }: MonthCalendarOptions) => {
   const [year, month] = currentDate.split("T")[0].split("-").map(Number);
 
   const calendarMatrix = useMemo(() => {
-    return createCalendarMatrix(year, month - 1);
+    return createCalendarMatrix(year, month - 1, type);
   }, [year, month]);
 
   const monthCalendarData = useMemo(() => {

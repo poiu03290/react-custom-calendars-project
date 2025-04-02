@@ -41,7 +41,7 @@ const WeekCalendar = ({ type, initialDate }: WeekCalendarOptions) => {
     prevMonthDates,
     nextMonthDates,
   } = useMemo(() => {
-    return createCalendarMatrix(year, month - 1, true);
+    return createCalendarMatrix(year, month - 1, type, true);
   }, [year, month]);
 
   const weekDates = useMemo(() => {
@@ -81,6 +81,7 @@ const WeekCalendar = ({ type, initialDate }: WeekCalendarOptions) => {
     moveToNext: () => moveWeek(1),
     moveToPrev: () => moveWeek(-1),
     moveToPeriod: moveWeek,
+    matrix,
   };
 };
 

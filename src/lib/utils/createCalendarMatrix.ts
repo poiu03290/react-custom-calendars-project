@@ -11,6 +11,7 @@ interface CalendarMatrix {
 export const createCalendarMatrix = (
   year: number,
   month: number,
+  type: string,
   includeAdjacentMonths: boolean = false
 ): CalendarMatrix => {
   // month는 0-based (0: 1월, 11: 12월)
@@ -53,7 +54,7 @@ export const createCalendarMatrix = (
           const fullDate = new Date(
             Date.UTC(prevYear, adjustedPrevMonth, prevDate)
           );
-          prevMonthDates[prevDate] = format(fullDate, "yyyy-MM-dd");
+          prevMonthDates[prevDate] = format(fullDate, type);
         }
       } else if (date <= lastDate) {
         // 현재 달의 날짜
@@ -65,7 +66,7 @@ export const createCalendarMatrix = (
           const fullDate = new Date(
             Date.UTC(nextYear, adjustedNextMonth, nextMonthDate)
           );
-          nextMonthDates[nextMonthDate] = format(fullDate, "yyyy-MM-dd");
+          nextMonthDates[nextMonthDate] = format(fullDate, type);
         }
         nextMonthDate++;
       }
