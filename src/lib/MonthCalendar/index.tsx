@@ -4,7 +4,6 @@ import {
   createCalendarMatrix,
   formatMatrixDates,
 } from "../utils/createCalendarMatrix";
-import { toISODateString } from "../utils/date";
 
 interface MonthCalendarOptions {
   type: string;
@@ -18,20 +17,18 @@ const MonthCalendar = ({ type, initialDate }: MonthCalendarOptions) => {
 
   const [currentDate, setCurrentDate] = useState(() => {
     if (initialDate) {
-      return toISODateString(
-        new Date(
-          Date.UTC(initialDate.getUTCFullYear(), initialDate.getUTCMonth(), 1)
-        )
-      );
+      return new Date(
+        Date.UTC(initialDate.getUTCFullYear(), initialDate.getUTCMonth(), 1)
+      ).toISOString();
     }
 
     const now = new Date();
-    return toISODateString(
-      new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1))
-    );
+    return new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)
+    ).toISOString();
   });
 
-  const [year, month] = currentDate.split("-").map(Number);
+  const [year, month] = currentDate.split("T")[0].split("-").map(Number);
 
   const calendarMatrix = useMemo(() => {
     return createCalendarMatrix(year, month - 1);
@@ -43,7 +40,7 @@ const MonthCalendar = ({ type, initialDate }: MonthCalendarOptions) => {
 
   const moveMonth = (delta: number) => {
     const date = new Date(Date.UTC(year, month - 1 + delta, 1));
-    setCurrentDate(toISODateString(date));
+    setCurrentDate(date.toISOString());
   };
 
   return {

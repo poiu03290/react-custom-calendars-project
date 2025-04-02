@@ -14,8 +14,9 @@ export const createCalendarMatrix = (
   includeAdjacentMonths: boolean = false
 ): CalendarMatrix => {
   // month는 0-based (0: 1월, 11: 12월)
-  const firstDay = new Date(Date.UTC(year, month, 1)).getUTCDay();
-  const lastDate = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+  const firstDayDate = new Date(Date.UTC(year, month, 1));
+  const firstDay = firstDayDate.getDay();
+  const lastDate = new Date(Date.UTC(year, month + 1, 0)).getDate();
 
   // 이전 달의 마지막 날짜 계산
   const prevMonth = month - 1;
@@ -23,7 +24,7 @@ export const createCalendarMatrix = (
   const adjustedPrevMonth = prevMonth < 0 ? 11 : prevMonth;
   const lastDayOfPrevMonth = new Date(
     Date.UTC(prevYear, adjustedPrevMonth + 1, 0)
-  ).getUTCDate();
+  ).getDate();
 
   // 다음 달 계산
   const nextMonth = month + 1;
@@ -52,9 +53,7 @@ export const createCalendarMatrix = (
           const fullDate = new Date(
             Date.UTC(prevYear, adjustedPrevMonth, prevDate)
           );
-          prevMonthDates[prevDate] = format(fullDate, "yyyy-MM-dd", {
-            timeZone: "UTC",
-          });
+          prevMonthDates[prevDate] = format(fullDate, "yyyy-MM-dd");
         }
       } else if (date <= lastDate) {
         // 현재 달의 날짜
@@ -66,9 +65,7 @@ export const createCalendarMatrix = (
           const fullDate = new Date(
             Date.UTC(nextYear, adjustedNextMonth, nextMonthDate)
           );
-          nextMonthDates[nextMonthDate] = format(fullDate, "yyyy-MM-dd", {
-            timeZone: "UTC",
-          });
+          nextMonthDates[nextMonthDate] = format(fullDate, "yyyy-MM-dd");
         }
         nextMonthDate++;
       }
@@ -87,10 +84,8 @@ export const getWeekFromMatrix = (
   nextMonthDates: { [key: number]: string },
   type: string
 ): string[] => {
-  // targetDate가 있는 주 찾기
   let targetWeek = matrix.find((week) => week.includes(targetDate));
 
-  // 현재 날짜가 없으면 마지막 주를 반환
   if (!targetWeek && targetDate > 28) {
     targetWeek = matrix[matrix.length - 1];
   }
@@ -100,14 +95,13 @@ export const getWeekFromMatrix = (
   return targetWeek.map((day) => {
     if (day > 0) {
       // 현재 달의 날짜
-      const date = new Date(Date.UTC(year, month, day));
-      return format(date, type, { timeZone: "UTC" });
+      return format(new Date(year, month, day), type);
     } else if (day < 0) {
       // 이전/다음 달의 날짜
       const absDay = Math.abs(day);
       const dateString = prevMonthDates[absDay] || nextMonthDates[absDay];
       if (!dateString) return "0";
-      return format(new Date(dateString), type, { timeZone: "UTC" });
+      return format(new Date(dateString), type);
     }
     return "0";
   });
@@ -126,14 +120,13 @@ export const formatMatrixDates = (
     week.map((day) => {
       if (day > 0) {
         // 현재 달의 날짜
-        const date = new Date(Date.UTC(year, month, day));
-        return format(date, type, { timeZone: "UTC" });
+        return format(new Date(year, month, day), type);
       } else if (includeAdjacentMonths && day < 0) {
         // 이전/다음 달의 날짜
         const absDay = Math.abs(day);
         const dateString = prevMonthDates[absDay] || nextMonthDates[absDay];
         if (!dateString) return "0";
-        return format(new Date(dateString), type, { timeZone: "UTC" });
+        return format(new Date(dateString), type);
       }
       return "0";
     })

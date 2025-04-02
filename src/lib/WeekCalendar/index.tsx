@@ -4,7 +4,6 @@ import {
   formatMatrixDates,
   getWeekFromMatrix,
 } from "../utils/createCalendarMatrix";
-import { toISODateString } from "../utils/date";
 
 interface WeekCalendarOptions {
   type: string;
@@ -18,26 +17,22 @@ const WeekCalendar = ({ type, initialDate }: WeekCalendarOptions) => {
 
   const [currentDate, setCurrentDate] = useState(() => {
     if (initialDate) {
-      return toISODateString(
-        new Date(
-          Date.UTC(
-            initialDate.getUTCFullYear(),
-            initialDate.getUTCMonth(),
-            initialDate.getUTCDate()
-          )
+      return new Date(
+        Date.UTC(
+          initialDate.getUTCFullYear(),
+          initialDate.getUTCMonth(),
+          initialDate.getUTCDate()
         )
-      );
+      ).toISOString();
     }
 
     const now = new Date();
-    return toISODateString(
-      new Date(
-        Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
-      )
-    );
+    return new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
+    ).toISOString();
   });
 
-  const [year, month, day] = currentDate.split("-").map(Number);
+  const [year, month, day] = currentDate.split("T")[0].split("-").map(Number);
 
   const {
     matrix,
@@ -75,7 +70,7 @@ const WeekCalendar = ({ type, initialDate }: WeekCalendarOptions) => {
 
   const moveWeek = (delta: number) => {
     const date = new Date(Date.UTC(year, month - 1, day + delta * 7));
-    setCurrentDate(toISODateString(date));
+    setCurrentDate(date.toISOString());
   };
 
   return {
