@@ -1,0 +1,39 @@
+name: Auto Link Issue in PR
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  link-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for issue number in title
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const title = context.payload.pull_request.title;
+            const body = context.payload.pull_request.body || '';
+            const issueNumberMatch = title.match(/#(\d+)/);
+
+            if (issueNumberMatch) {
+              const issueNumber = issueNumberMatch[1];
+              const closeKeyword = `Closes #${issueNumber}`;
+
+              // 이미 본문에 Closes 문구가 없으면 추가
+              if (!body.includes(closeKeyword)) {
+                const newBody = `${body}\n\n${closeKeyword}`;
+                await github.rest.pulls.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: context.payload.pull_request.number,
+                  body: newBody
+                });
+                console.log(`✅ Added "${closeKeyword}" to PR body.`);
+              } else {
+                console.log('ℹ️ Closes keyword already exists in PR body.');
+              }
+            } else {
+              console.log('❌ No issue number found in PR title.');
+            }
