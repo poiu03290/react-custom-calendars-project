@@ -1,4 +1,4 @@
-import { format } from "date-fns-tz";
+import { formatDate } from "./formatDate";
 
 interface CalendarMatrix {
   matrix: number[][];
@@ -54,7 +54,7 @@ export const createCalendarMatrix = (
           const fullDate = new Date(
             Date.UTC(prevYear, adjustedPrevMonth, prevDate)
           );
-          prevMonthDates[prevDate] = format(fullDate, type);
+          prevMonthDates[prevDate] = formatDate(fullDate, type);
         }
       } else if (date <= lastDate) {
         // 현재 달의 날짜
@@ -66,7 +66,7 @@ export const createCalendarMatrix = (
           const fullDate = new Date(
             Date.UTC(nextYear, adjustedNextMonth, nextMonthDate)
           );
-          nextMonthDates[nextMonthDate] = format(fullDate, type);
+          nextMonthDates[nextMonthDate] = formatDate(fullDate, type);
         }
         nextMonthDate++;
       }
@@ -96,13 +96,14 @@ export const getWeekFromMatrix = (
   return targetWeek.map((day) => {
     if (day > 0) {
       // 현재 달의 날짜
-      return format(new Date(Date.UTC(year, month, day)), type);
+      return formatDate(new Date(Date.UTC(year, month, day)), type);
     } else if (day < 0) {
       // 이전/다음 달의 날짜
       const absDay = Math.abs(day);
       const dateString = prevMonthDates[absDay] || nextMonthDates[absDay];
       if (!dateString) return "0";
-      return format(new Date(dateString), type);
+
+      return formatDate(new Date(dateString), type);
     }
     return "0";
   });
@@ -121,13 +122,14 @@ export const formatMatrixDates = (
     week.map((day) => {
       if (day > 0) {
         // 현재 달의 날짜
-        return format(new Date(Date.UTC(year, month, day)), type);
+        return formatDate(new Date(Date.UTC(year, month, day)), type);
       } else if (includeAdjacentMonths && day < 0) {
         // 이전/다음 달의 날짜
         const absDay = Math.abs(day);
         const dateString = prevMonthDates[absDay] || nextMonthDates[absDay];
         if (!dateString) return "0";
-        return format(new Date(dateString), type);
+
+        return formatDate(new Date(dateString), type);
       }
       return "0";
     })

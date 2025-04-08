@@ -1,19 +1,20 @@
 import "./App.css";
 import { WeekCalendar } from "./lib";
+import { MonthCalendar } from "./lib";
 
 function App() {
-  const { currentDate } = WeekCalendar({
+  const { weekDates, monthlyWeekGrid, currentDate } = WeekCalendar({
     type: "MM/dd",
   });
-  // const { monthCalendarData } = MonthCalendar({
-  //   type: "MM/dd",
-  // });
+  const { monthCalendarData } = MonthCalendar({
+    type: "MM/dd",
+  });
 
   return (
     <>
-      <div style={{ backgroundColor: "white" }}>
-        <p style={{ color: "black" }}>currentDate: {currentDate}</p>
-        {/* <p>updateDate: 2025-04-08 14:43</p>
+      <div>
+        <p>currentDate: {currentDate}</p>
+        <p>updateDate: 2025-04-08 14:43</p>
         <div>
           <p>weekDates</p>
           <ul>
@@ -22,6 +23,7 @@ function App() {
             ))}
           </ul>
         </div>
+
         <div>
           <p>monthlyWeekGrid</p>
           <ul>
@@ -63,7 +65,7 @@ function App() {
               </li>
             ))}
           </ul>
-        </div> */}
+        </div>
       </div>
     </>
   );
