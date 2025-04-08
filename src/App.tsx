@@ -11,8 +11,8 @@ function App() {
 
   return (
     <>
-      <div>
-        <p>currentDate: {currentDate}</p>
+      <div style={{ backgroundColor: "white" }}>
+        <p style={{ color: "black" }}>currentDate: {currentDate}</p>
         {/* <p>updateDate: 2025-04-08 14:43</p>
         <div>
           <p>weekDates</p>
