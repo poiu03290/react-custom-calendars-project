@@ -16,8 +16,14 @@ jobs:
         run: |
           # 마지막 커밋 메시지 가져오기
           COMMIT_MSG=$(git log -1 --pretty=%s)
-          # PR 제목 설정 ([feature] + 커밋 메시지)
-          NEW_TITLE="[feature] $COMMIT_MSG"
+
+          # feat: -> [feature] 형식으로 변환
+          if [[ $COMMIT_MSG =~ ^feat:\ (.*)$ ]]; then
+            DESCRIPTION="${BASH_REMATCH[1]}"
+            NEW_TITLE="[feature] $DESCRIPTION"
+          else
+            NEW_TITLE="[feature] $COMMIT_MSG"
+          fi
 
           # GitHub CLI를 사용하여 PR 제목 업데이트
           gh pr edit ${{ github.event.pull_request.number }} --title "$NEW_TITLE"
