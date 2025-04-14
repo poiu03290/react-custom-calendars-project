@@ -31,6 +31,7 @@ const WeekCalendar = ({ type, initialDate }: WeekCalendarOptions) => {
       Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
     ).toISOString();
   });
+  console.log("12312");
 
   const [year, month, day] = currentDate.split("T")[0].split("-").map(Number);
 
