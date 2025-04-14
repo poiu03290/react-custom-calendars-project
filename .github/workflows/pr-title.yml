@@ -1,0 +1,14 @@
+name: PR Title Checker
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  check-pr-title:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: deepakputhraya/action-pr-title@master
+        with:
+          regex: '^\[(feature|fix|docs|style|refactor|test|chore)\] .+$'
+          error_message: "PR 제목이 형식에 맞지 않습니다. (예: [feature] 기능 설명)"
