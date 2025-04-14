@@ -14,6 +14,7 @@ const WeekCalendar = ({ type, initialDate }: WeekCalendarOptions) => {
   if (!type) {
     throw new Error("Calendar type is required");
   }
+  console.log("111");
 
   const [currentDate, setCurrentDate] = useState(() => {
     if (initialDate) {
