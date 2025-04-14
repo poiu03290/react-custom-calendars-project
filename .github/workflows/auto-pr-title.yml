@@ -1,0 +1,25 @@
+name: Auto PR Title
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  set-title:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      - name: Set PR Title
+        run: |
+          # 마지막 커밋 메시지 가져오기
+          COMMIT_MSG=$(git log -1 --pretty=%s)
+          # PR 제목 설정 ([feature] + 커밋 메시지)
+          NEW_TITLE="[feature] $COMMIT_MSG"
+
+          # GitHub CLI를 사용하여 PR 제목 업데이트
+          gh pr edit ${{ github.event.pull_request.number }} --title "$NEW_TITLE"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
